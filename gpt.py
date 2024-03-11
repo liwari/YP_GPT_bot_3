@@ -1,8 +1,38 @@
 from log import log_info, log_error
-from config import GPT_API_URL, GPT_TEMPERATURE, GPT_MAX_TOKENS, GPT_SYSTEM_CONTENT, GPT_MODEL, GPT_MAX_USER_TOKENS
+from config import (GPT_API_URL, GPT_TEMPERATURE, GPT_MAX_TOKENS, GPT_SYSTEM_CONTENT, GPT_MODEL, GPT_MAX_USER_TOKENS,
+                    GPT_THEME, GPT_LEVEL)
 import requests
-from transformers import AutoTokenizer
+# from transformers import AutoTokenizer
 system_content = GPT_SYSTEM_CONTENT
+theme = GPT_THEME
+level = GPT_LEVEL
+
+
+themes_prompts = {
+                      'математика': 'Ты помощник по математике',
+                      'искусство': 'Ты помощник по искусству',
+                    }
+levels_prompts = {
+                      'новичок': 'давай простые ответы',
+                      'профи': 'давай сложные ответы'
+                    }
+
+
+def generate_system_prompt_message(text: str):
+    return {"role": "system", "content": text}
+
+
+def generate_system_prompt_messages():
+    system_prompt_messages = []
+    if system_content:
+        system_prompt_messages.append(generate_system_prompt_message(system_content))
+    theme_prompt = themes_prompts.get(theme)
+    if theme_prompt:
+        system_prompt_messages.append(generate_system_prompt_message(theme_prompt))
+    level_prompt = levels_prompts.get(level)
+    if level_prompt:
+        system_prompt_messages.append(generate_system_prompt_message(level_prompt))
+    return system_prompt_messages
 
 
 def count_tokens(text):
@@ -36,7 +66,10 @@ def get_answer_from_response(response):
 
 def get_answer_from_gpt(question: str):
     log_info(f"Запрос пользователя: {question}")
-    messages = [{"role": "system", "content": system_content}, {"role": "user", "content": question}]
+    messages = []
+    system_messages = generate_system_prompt_messages()
+    messages.extend(system_messages)
+    messages.append({"role": "user", "content": question})
     tokens_number = count_tokens(question)
     if tokens_number > GPT_MAX_USER_TOKENS:
         log_error(f'Превышено допустимое количество токенов запроса пользователя: {tokens_number} > {GPT_MAX_USER_TOKENS}')

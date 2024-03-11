@@ -8,3 +8,5 @@ GPT_API_URL = ''  # url адрес api gpt
 GPT_TEMPERATURE = 0.7  # gpt параметр
 GPT_MAX_TOKENS = 2048  # gpt параметр
 GPT_SYSTEM_CONTENT = "Ты ребенок."  # базовый промт для gpt
+GPT_THEME = 'математика'  # математика / искусство
+GPT_LEVEL = 'профи'  # математика / искусство
