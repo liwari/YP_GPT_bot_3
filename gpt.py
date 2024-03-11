@@ -4,8 +4,8 @@ from config import (GPT_API_URL, GPT_TEMPERATURE, GPT_MAX_TOKENS, GPT_SYSTEM_CON
 import requests
 # from transformers import AutoTokenizer
 system_content = GPT_SYSTEM_CONTENT
-theme = GPT_THEME
-level = GPT_LEVEL
+# theme = GPT_THEME
+# level = GPT_LEVEL
 
 
 themes_prompts = {
@@ -22,7 +22,7 @@ def generate_system_prompt_message(text: str):
     return {"role": "system", "content": text}
 
 
-def generate_system_prompt_messages():
+def generate_system_prompt_messages(theme, level):
     system_prompt_messages = []
     if system_content:
         system_prompt_messages.append(generate_system_prompt_message(system_content))
@@ -64,10 +64,10 @@ def get_answer_from_response(response):
         return f'Произошла ошибка ({response.status_code}). Попробуйте отправить запрос заново'
 
 
-def get_answer_from_gpt(question: str):
+def get_answer_from_gpt(question: str, theme: str, level: str):
     log_info(f"Запрос пользователя: {question}")
     messages = []
-    system_messages = generate_system_prompt_messages()
+    system_messages = generate_system_prompt_messages(theme, level)
     messages.extend(system_messages)
     messages.append({"role": "user", "content": question})
     tokens_number = count_tokens(question)
