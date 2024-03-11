@@ -1,6 +1,5 @@
 from log import log_info, log_error
-from config import (GPT_API_URL, GPT_TEMPERATURE, GPT_MAX_TOKENS, GPT_SYSTEM_CONTENT, GPT_MODEL, GPT_MAX_USER_TOKENS,
-                    GPT_THEME, GPT_LEVEL)
+from config import (GPT_API_URL, GPT_TEMPERATURE, GPT_MAX_TOKENS, GPT_SYSTEM_CONTENT, GPT_MODEL, GPT_MAX_USER_TOKENS)
 import requests
 # from transformers import AutoTokenizer
 system_content = GPT_SYSTEM_CONTENT
