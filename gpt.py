@@ -49,26 +49,14 @@ def get_answer_from_response(response):
         return f'Произошла ошибка ({response.status_code}). Попробуйте отправить запрос заново'
 
 
-def get_answer_from_gpt(question: str, theme_prompt: str, level_prompt: str):
-    log_info(f"Запрос пользователя: {question}")
-    messages = []
-    system_messages = generate_system_prompt_messages(theme_prompt, level_prompt)
-    messages.extend(system_messages)
-    user_message = {"role": "user", "content": question}
-    messages.append(user_message)
-    tokens_number = count_tokens(question)
+def get_answer_from_gpt(messages: list[dict[str, str]], all_text: str):
+    log_info(f"Запрос пользователя: {messages[-1]['content']}")
+    tokens_number = count_tokens(all_text)
     if tokens_number > GPT_MAX_USER_TOKENS:
         log_error(f'Превышено допустимое количество токенов запроса пользователя: {tokens_number} > {GPT_MAX_USER_TOKENS}')
         return {"answer": 'Запрос не принят.\nДлина запроса превышает допустимое значение.\nОтправьте запрос '
-                          'повторно', "continue": None}
+                          'повторно', "tokens_number": tokens_number}
     response = gpt_post(messages)
     answer = get_answer_from_response(response)
-    messages.append({"role": "assistant", "content": answer})
 
-    def continue_answer():
-        next_response = gpt_post(messages)
-        next_answer = get_answer_from_response(next_response)
-        messages.append({"role": "assistant", "content": next_answer})
-        return next_answer
-
-    return {"answer": answer, "continue": continue_answer}
+    return {"answer": answer, "tokens_number": tokens_number}
