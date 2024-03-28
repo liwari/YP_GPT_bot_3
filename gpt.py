@@ -9,17 +9,6 @@ def generate_system_prompt_message(text: str):
     return {"role": "system", "content": text}
 
 
-def generate_system_prompt_messages(theme_prompt, level_prompt):
-    system_prompt_messages = []
-    if system_content:
-        system_prompt_messages.append(generate_system_prompt_message(system_content))
-    if theme_prompt:
-        system_prompt_messages.append(generate_system_prompt_message(theme_prompt))
-    if level_prompt:
-        system_prompt_messages.append(generate_system_prompt_message(level_prompt))
-    return system_prompt_messages
-
-
 def count_tokens(text):
     # tokenizer = AutoTokenizer.from_pretrained(GPT_MODEL)
     # return len(tokenizer.encode(text))

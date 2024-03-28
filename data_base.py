@@ -22,7 +22,7 @@ def create_user_data_table(cursor: sqlite3.Cursor):
                 f'user_id INTEGER, ' \
                 f'user_name TEXT, ' \
                 f'session_id INTEGER, ' \
-                f'total_tokens TEXT)'
+                f'total_tokens INTEGER)'
 
     cursor.execute(sql_query)
 
@@ -34,8 +34,8 @@ def create_messages_data_table(cursor: sqlite3.Cursor):
                 f'session_id INTEGER, ' \
                 f'role TEXT, ' \
                 f'content TEXT, ' \
-                f'number_tokens TEXT, ' \
-                f'total_tokens TEXT)'
+                f'number_tokens INTEGER, ' \
+                f'total_tokens INTEGER)'
 
     cursor.execute(sql_query)
 
@@ -69,14 +69,14 @@ def update_user_data(user_id, column, value):
     connection.close()
 
 
-def add_message_data(user_id, role: str, content: str):
+def add_message_data(user_id, role: str, content: str, total_tokens=0):
     user_data = get_user_data(user_id)
     session_id = user_data['session_id']
 
     connection = sqlite3.connect(db_path)
     cursor = connection.cursor()
-    sql_query = "INSERT INTO messages_data(user_id, role, content, session_id) VALUES(?, ?, ?, ?)"
-    cursor.execute(sql_query, (user_id, role, content, session_id))
+    sql_query = "INSERT INTO messages_data(user_id, role, content, session_id, total_tokens) VALUES(?, ?, ?, ?, ?)"
+    cursor.execute(sql_query, (user_id, role, content, session_id, total_tokens))
 
     connection.commit()
     connection.close()
