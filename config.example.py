@@ -8,3 +8,8 @@ GPT_API_URL = ''  # url адрес api gpt
 GPT_TEMPERATURE = 3.0  # gpt параметр
 GPT_MAX_TOKENS = 2048  # gpt параметр
 GPT_SYSTEM_CONTENT = "Ты ребенок."  # базовый промт для gpt
+
+MAX_PROJECT_TOKENS = 15000  # макс. количество токенов на весь проект
+MAX_USERS = 5  # макс. количество пользователей на весь проект
+MAX_SESSIONS = 3  # макс. количество сессий у пользователя
+MAX_TOKENS_IN_SESSION = 1000  # макс. количество токенов за сессию пользователя
